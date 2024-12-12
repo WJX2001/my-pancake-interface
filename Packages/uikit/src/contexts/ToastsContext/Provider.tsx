@@ -1,6 +1,17 @@
 import useIsWindowVisible from '@/Packages/hooks/useIsWindowVisible';
-import { ReactElement, useCallback, useEffect } from 'react';
+import {
+  createContext,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 import { ExternalToast, ToastT, toast as sonnerToast } from 'sonner';
+import { ToastContextApi } from './types';
+
+export const ToastsContext = createContext<ToastContextApi | undefined>(
+  undefined,
+);
 
 const toasts = new Map<
   string | number,
@@ -31,4 +42,23 @@ export const ToastsProvider: React.FC<React.PropsWithChildren> = ({
       });
     }
   }, [isWindowVisible, deleteCallback]);
+
+  const clear = useCallback(() => {
+    toasts.clear();
+    sonnerToast.dismiss();
+  }, []);
+  const remove = useCallback((id: string | number) => {
+    toasts.delete(id);
+    sonnerToast.dismiss(id);
+  }, []);
+
+  const providerValue = useMemo(() => {
+    return { clear, remove };
+  }, [clear, remove]);
+
+  return (
+    <ToastsContext.Provider value={providerValue}>
+      {children}
+    </ToastsContext.Provider>
+  );
 };

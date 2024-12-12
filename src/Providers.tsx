@@ -11,21 +11,22 @@ import {
   useTheme as useNextTheme,
 } from 'next-themes';
 import { Provider } from 'react-redux';
-import { NAMEWJX } from '@/Packages/uikit/src/Providers';
+import { UIKitProvider } from '@/Packages/uikit/src/Providers';
+
 
 const queryClient = new QueryClient();
 
-// const StyledUIKitProvider: React.FC<React.PropsWithChildren> = ({
-//   children,
-//   ...props
-// }) => {
-//   const { resolvedTheme } = useNextTheme();
-//   return (
-//     <UIKitProvider theme={resolvedTheme === 'dark' ? dark : light} {...props}>
-//       {children}
-//     </UIKitProvider>
-//   );
-// };
+const StyledUIKitProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+  ...props
+}) => {
+  const { resolvedTheme } = useNextTheme();
+  return (
+    <UIKitProvider theme={resolvedTheme === 'dark' ? dark : light} {...props}>
+      {children}
+    </UIKitProvider>
+  );
+};
 
 const Providers: React.FC<
   React.PropsWithChildren<{
